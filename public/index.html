@@ -277,7 +277,7 @@
       const startIntake = async () => {
         setStatus("Starting new intake...");
         try {
-          const res = await fetch(`${API_BASE}/intake/start`, { method: "POST" });
+          const res = await fetch(`${API_BASE}/api/intake/start`, { method: "POST" });
           const data = await handleResponse(res);
           setSession(data.sessionId);
           renderQuestion(data.question);
@@ -294,7 +294,7 @@
         }
         setStatus("Sending answer...");
         try {
-          const res = await fetch(`${API_BASE}/intake/answer`, {
+          const res = await fetch(`${API_BASE}/api/intake/answer`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ sessionId, userText: text }),
