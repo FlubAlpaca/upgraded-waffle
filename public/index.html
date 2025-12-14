@@ -143,8 +143,11 @@
 
   <script>
     (() => {
-      // Set API_BASE to your backend origin if it differs from this page's origin.
-      const API_BASE = "http://localhost:3001/api";
+      // Default to relative API path so it works with same-origin deployments; override by setting window.API_BASE.
+      const API_BASE = (
+        (typeof window !== "undefined" && window.API_BASE) ||
+        "/api"
+      ).replace(/\/$/, "");
       let sessionId = localStorage.getItem("sessionId") || "";
       let cachedQuestion = null;
 
