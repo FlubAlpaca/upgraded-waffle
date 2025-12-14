@@ -1,0 +1,617 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Last Will and Testament</title>
+  <style>
+     body { font-family: "Times New Roman", serif; margin: 2cm; line-height: 1.6; }
+
+  /* Print/PDF margins: 1 inch top & bottom, keep 2 cm left & right */
+     @page { size: Letter; margin: 1in 2cm; }
+
+     @media print {
+       body { margin: 0; } /* let @page control margins when printing */
+     }
+    .doc { white-space: pre-line; } /* preserve line breaks exactly as written below */
+    .center { text-align: center; }
+    .signature-line { display:block; margin-top: 12px; margin-bottom: 12px; }
+  </style>
+</head>
+<body>
+<div class="doc">
+THIS IS THE LAST WILL AND TESTAMENT of me, {{testator}} of {{testatorCity}},
+{{testatorProvince}}.
+
+1. REVOCATION
+
+{{#if foreignWills}}
+I revoke all my prior Wills and Codicils that are intended to dispose of my property (my “Nova
+Scotia Property”) situated in Nova Scotia. If I have any Wills in any jurisdiction other than Nova
+Scotia (“Foreign Wills”), those Foreign Wills are not revoked by this Nova Scotia Will. The
+Foreign Wills will have effect concurrently with this Nova Scotia Will, but I revoke the Foreign
+Wills to the limited extent that the Foreign Wills purport to have effect in Nova Scotia or apply to
+any of my Nova Scotia Property.
+{{else}}
+I revoke all Wills and Codicils previously made by me.
+{{/if}}
+
+{{#if marriage}}
+1.1 MARRIAGE
+
+I make this Will in contemplation of my marriage to {{intendedSpouse}}, and I declare that it is my
+intention that this Will shall not be revoked by that marriage.
+{{/if}}
+
+{{#if divorce}}
+1.1 DIVORCE
+
+Notwithstanding any rule of law or statutory provision to the contrary, including Section 19A
+of the Nova Scotia Wills Act, I declare that all gifts, bequests, appointments, or powers of
+appointment in this Will in favor of my spouse, {{spouseName}}, and any appointment of {{spouseName}} as executor,
+trustee, or in any other fiduciary capacity, shall remain valid and enforceable, even if my
+marriage to {{spouseName}} is subsequently terminated by divorce or declared a nullity.
+{{/if}}
+
+2. INTERPRETATION
+
+Where used in this document,
+
+(a) “executor” shall be interchangeable with the term “estate trustee with a will,” shall be
+deemed to include “trustee” if a trust fund has been established, to be pluralized if more than
+one executor has been named, and to include all genders as the context in each case
+requires;
+
+(b) pronouns shall be construed as meaning the singular or plural, gender, personal or body
+corporate as the context in each case requires and "their" may be used in place of "his" or
+"her";
+
+(c) paragraph headings are for reference purposes only and shall not define, limit, extend, or
+otherwise affect the meaning of any term or provision;
+
+(d) “divide” shall be deemed to include “pay”, “transfer” and “deliver” as the context in each
+case requires;
+
+(e) the terms “surviving”, “survivors”, "survive me", "survives me", and "survived me" shall be
+deemed to include only those alive on the thirtieth day after the date of my death.
+
+(f) “child” or “children” means surviving biological or legally adopted children, unless
+otherwise specified.
+
+(g) “sibling" or “siblings” means surviving biological siblings, unless otherwise specified.
+
+(h) "lineal descendant or descendants" shall be deemed to include those who have been
+legally adopted, unless otherwise specified.
+
+3. APPOINTMENT OF EXECUTOR
+
+{{#if executorOne}}
+[1 Executor]
+(a) I appoint {{executor}} of {{executorCity}}, {{executorProvince}} to be the sole
+executor of my estate.
+{{/if}}
+
+{{#if executorTwo}}
+[2 Executors acting jointly]
+(a) I appoint {{executor}} of {{executorCity}}, {{executorProvince}}, and {{altExecutor}}
+of {{altExecutorCity}}, {{altExecutorProvince}} as joint executors of my estate, with the
+direction that they act together in all matters concerning the administration of my estate. They
+must jointly make decisions and sign off on all actions related to the estate's administration,
+ensuring unified management and execution of my will as per my wishes. However, if one of
+these has not survived me, or at any time is unable or unwilling to act, then I appoint the other to
+be the sole executor of my estate.
+{{/if}}
+
+{{#if executorThree}}
+[2 Executors acting independently]
+(a) I appoint {{executor}} of {{executorCity}}, {{executorProvince}}, and {{altExecutor}}
+of {{altExecutorCity}}, {{altExecutorProvince}}, as co-executors of my estate, with
+authority to act independent of each other. This grants either of them the power to make
+decisions and take actions concerning the administration of my estate without the need for joint
+approval, ensuring flexibility and efficiency in managing my estate as per my wishes. However, if
+one of these has not survived me, or at any time is unable or unwilling to act, then I appoint the
+other to be the sole executor of my estate.
+{{/if}}
+
+{{#if altExecutorOne}}
+[1 Alternate Executor]
+(b) If my executor first named has not survived me, or at any time is unable or unwilling to act,
+then I appoint {{altExecutor}} of {{altExecutorCity}}, {{altExecutorProvince}} as the sole
+executor of my estate.
+{{/if}}
+
+{{#if altExecutorTwo}}
+[2 Alternate Executors acting jointly]
+(b) If my executor first named has not survived me, or at any time is unable or unwilling to act,
+then I appoint {{altExecutor}} of {{altExecutorCity}}, {{altExecutorProvince}}, and {{alt2Executor}}
+of {{alt2ExecutorCity}}, {{alt2ExecutorProvince}} as joint executors of my
+estate, with the direction that they act together in all matters concerning the administration of my
+estate. They must jointly make decisions and sign off on all actions related to the estate's
+administration, ensuring unified management and execution of my will as per my wishes.
+However, if one of these has not survived me, or at any time is unable or unwilling to act, then I
+appoint the other to be the sole executor of my estate.
+{{/if}}
+
+{{#if altExecutorThree}}
+[2 Alternate Executors acting independently]
+(b) If my executor first named has not survived me, or at any time is unable or unwilling to act,
+then I appoint {{altExecutor}} of {{altExecutorCity}}, {{altExecutorProvince}}, and {{alt2Executor}}
+of {{alt2ExecutorCity}}, {{alt2ExecutorProvince}}, as co-executors of my
+estate, with authority to act independent of each other. This grants either of them the power to
+make decisions and take actions concerning the administration of my estate without the need
+for joint approval, ensuring flexibility and efficiency in managing my estate as per my wishes.
+However, if one of these has not survived me, or at any time is unable or unwilling to act, then I
+appoint the other to be the sole executor of my estate.
+{{/if}}
+
+{{#if altAltExecutor}}
+[Alternate Alternate Executor]
+(c) If both my executors named above have not survived me, or at any time are unable or
+unwilling to act, then I appoint {{alt2Executor}} of {{alt2ExecutorCity}}, {{alt2ExecutorProvince}}
+as the sole executor of my estate.
+{{/if}}
+
+4. PAYMENT OF DEBTS AND TAXES
+
+I direct my executor or executors to pay as soon as convenient after my death all debts, funeral
+and testamentary expenses and taxes that my estate is legally bound to pay, or to commute,
+prepay or defer payment of such debts or taxes as my executor or executors may in his, her, or
+their sole and absolute discretion consider advisable, and I hereby empower my executor or
+executors to make any election, determination, or designation pursuant to the Income Tax Act or
+any other taxing statute or any regulation pursuant thereto.
+
+5. DISPOSITION OF PROPERTY
+
+I give all the residue of my property, both real and personal, and including any property over
+which I may have a general power of appointment, to the executor or executors UPON THE
+FOLLOWING TRUSTS, namely:
+
+Personal articles
+
+(a) to divide all articles of a personal, domestic, or household use or ornament or works of
+art, not specifically referred to elsewhere in this my Last Will, in accordance with a list,
+memorandum, or letter signed by me, which I may leave among my personal papers or
+attached to a copy of this my Last Will;
+
+Specific gifts
+
+{{#if giftList}}
+(b) to give and transfer each of the following items to the person named for his or her
+exclusive and absolute use:
+{{#each gifts}}
+({{inc @index}}) {{this.gift}} to {{this.recipient}};
+{{/each}}
+{{/if}}
+
+{{#if gift}}
+(b) to give and transfer {{gifts.[0].gift}} to {{gifts.[0].recipient}} for {{pronoun}} exclusive and absolute use.
+{{/if}}
+
+{{#if petCare}}
+(b.1) to give and transfer the sum of ${{petCareAmount}} to the person selected by my Executor to
+care for any pets I own at the time of my death, with the request that the funds be used for
+the care and well-being of those pets. I leave this request to the discretion of my Executor
+and the selected caregiver;
+{{/if}}
+
+{{#if hensonTrust}}
+(b.2) to give and transfer {{hensonAmount}} of the residue of my estate to my executor, to be held in
+trust in accordance with the Henson Trust provisions set out in this Will for the benefit of
+{{hensonBenificiary}}.
+{{/if}}
+
+{{#if lifeTenant}}
+Life Interest in Real Property
+
+(b.3) If {{lifeTenant}} survives me, I direct my Executor to hold any interest (the “Residential
+Property”) I have in lands and buildings at {{residentialAddress}}, subject to any financial encumbrances against
+the Residential Property (other than any charges for deferred property taxes), and:
+
+(i) permit {{lifeTenant}} to use and enjoy the Residential Property as long as {{lifeTenantPronoun}} lives,
+subject to certain conditions, including the responsibility to:
+
+A. keep the Residential Property insured;
+B. pay local taxes; and
+C. cover maintenance costs.
+
+{{#if lifeTenantDistribute}}
+(ii) Upon {{lifeTenant}}'s death or earlier inability or unwillingness to reside in the Residential Property,
+I direct my Executor to sell the Residential Property and distribute the proceeds to / among the
+following, or as many of them as survive me, share and share alike: {{lifeTenantDistributeList}}.
+{{/if}}
+
+{{#if lifeTenantTransfer}}
+(ii) Upon {{lifeTenant}}'s death or earlier inability or unwillingness to reside in the Residential Property,
+I direct my Executor to transfer the Residential Property to {{lifeTenantTransferRecipiant}};
+{{/if}}
+
+{{#if lifeTenantRest}}
+(ii) Upon {{lifeTenant}}'s death or earlier inability or unwillingness to reside in the Residential Property,
+I direct my Executor to add the Residential Property, or proceeds from the sale thereof, to the rest
+and residue of my estate.
+{{/if}}
+{{/if}}
+
+Rest and residue
+
+{{#if residueToExecutor}}
+(c) to give the rest and residue of my estate to {{executor}}.
+{{/if}}
+{{#if residueToChildren}}
+(c) to divide the rest and residue of my estate among my surviving children, share and share alike.
+{{/if}}
+{{#if residueToSiblings}}
+(c) to divide the rest and residue of my estate among my surviving siblings, share and share alike.
+{{/if}}
+{{#if residueToList}}
+(c) to divide the rest and residue of my estate among the following, or as many of them as
+survive me, share and share alike: {{residueList}}.
+{{/if}}
+{{#if residueShares}}
+(c) to divide the residue of my estate into equal shares which shall be distributed among the
+following, or as many of them as survive me:
+{{#each residueRecipients}}
+   ({{inc @index}}) {{this.name}} shall receive {{this.shares}} shares{{#unless @last}},{{/unless}}
+{{/each}}.
+{{/if}}
+
+Gift over
+
+{{#if fallbackToNamedPerson}}
+(d) in the event {{executor}} fails to survive me, to give the rest and residue of my estate to {{fallbackPerson}}.
+{{/if}}
+{{#if fallbackToChildren}}
+(d) in the event {{executor}} fails to survive me, to divide the rest and residue of my estate among my
+surviving children, share and share alike.
+{{/if}}
+{{#if fallbackToSiblings}}
+(d) in the event {{executor}} fails to survive me, to divide the rest and residue of my estate among my
+surviving siblings, share and share alike.
+{{/if}}
+{{#if fallbackToList}}
+(d) in the event {{executor}} fails to survive me, to divide the rest and residue of my estate among the
+following, or as many of them as survive me, share and share alike: {{fallbackList}}.
+{{/if}}
+{{#if fallbackShares}}
+(d) in the event {{executor}} fails to survive me, to divide the residue of my estate into equal shares
+which shall be distributed among the following, or as many of them as survive me:
+{{#each fallbackRecipients}}
+   ({{inc @index}}) {{this.name}} shall receive {{this.shares}} shares{{#unless @last}},{{/unless}}
+{{/each}}.
+{{/if}}
+
+Common catastrophe
+
+{{#if catastropheToNamedPerson}}
+(e) if, at any time, the disposition of any portion of my estate is not provided for by this Will, to give
+that portion to {{catastrophePerson}}.
+{{/if}}
+{{#if catastropheToChildren}}
+(e) if, at any time, the disposition of any portion of my estate is not provided for by this Will, to divide
+that portion among my surviving children, share and share alike.
+{{/if}}
+{{#if catastropheToSiblings}}
+(e) if, at any time, the disposition of any portion of my estate is not provided for by this Will, to divide
+that portion among my surviving siblings, share and share alike.
+{{/if}}
+{{#if catastropheToList}}
+(e) if, at any time, the disposition of any portion of my estate is not provided for by this Will, to divide
+that portion among the following, or as many of them as survive me, share and share alike: {{catastropheList}}.
+{{/if}}
+{{#if catastropheShares}}
+(e) if, at any time, the disposition of any portion of my estate is not provided for by this Will, to divide
+that portion into equal shares which shall be distributed among the following, or as many of them as
+survive me:
+{{#each catastropheRecipients}}
+   ({{inc @index}}) {{this.name}} shall receive {{this.shares}} shares{{#unless @last}},{{/unless}}
+{{/each}}.
+{{/if}}
+
+5.1. SIMULTANEOUS DEATH
+
+In the event that {{executor}} and I die within 30 days of each other, it shall be presumed for
+the purposes of this Will and the distribution of my estate, that {{executor}} has failed to survive me.
+
+5.2. LINEAL DESCENDANT OR DESCENDANTS OF DECEASED
+
+{{#if myChild}}
+Notwithstanding any other provision herein, if any child of mine who has been given a benefit herein
+dies before final distribution of my estate, leaving one or more lineal descendant or descendants
+then alive, such deceased child shall be considered alive for purposes of distribution hereunder and
+my executor or executors shall make the gift or distribution to which such deceased child would have
+been entitled, if he or she had not so died, to such lineal descendant or descendants by representation.
+{{/if}}
+{{#if anyPerson}}
+Notwithstanding any other provision herein, if any person, other than {{executor}}, who has been given a
+benefit herein dies before final distribution of my estate, leaving one or more lineal descendant or descendants
+then alive, such deceased person shall be considered alive for purposes of distribution hereunder and my executor
+or executors shall make the gift or distribution to which such deceased person would have been entitled, if he or she
+had not so died, to such lineal descendant or descendants by representation.
+{{/if}}
+
+6. AGE OR OTHER DISABILITY
+
+If any person who becomes entitled to any share in my estate is under the age of majority or is,
+in the opinion of my executor or a qualified medical practitioner, mentally incapable of managing
+their affairs, or is otherwise under a legal disability, my executor or executors shall hold that
+person’s share upon trust and keep it invested. My executor or executors may, in their absolute
+discretion, apply all or part of the income and capital of that share for the benefit, maintenance,
+education, or general well-being of such person, as they consider advisable. If the person
+becomes capable or reaches the age of majority, the executor or executors shall then transfer
+the remaining share to that person. If the person does not become capable, the share may
+continue to be held in trust for their lifetime, and upon their death, the remainder shall be
+distributed in accordance with the terms of this Will or, if none are provided, as part of the
+residue of my estate. The decision of my executor or executors in these matters shall be final,
+and the receipt of any person to whom a payment is made shall be a sufficient discharge.
+
+{{#if discretionaryTrust}}
+6.1 DISCRETIONARY TRUST
+
+I direct my executor to hold the share of {{nameOfBeneficiary}} in a fully discretionary trust for
+their lifetime. My trustee shall have absolute discretion to pay or apply such portions of the
+income or capital as they consider advisable for the care, maintenance, or benefit of {{nameOfBeneficiary}},
+who has a mental disability. {{nameOfBeneficiary}} shall have no legal right to demand payment of income or
+capital. Upon the death of {{nameOfBeneficiary}}, any remaining trust property shall be distributed as a part of
+the rest and residue of my estate.
+{{/if}}
+
+{{#if hensonTrust}}
+6.1 HENSON TRUST FOR {{hensonBenificiary}}
+
+If {{hensonBenificiary}}, is alive at the time of my death, and if in the opinion of my executor
+or of a qualified medical practitioner, {{pronounOfBeneficiary}} is a person with a disability who is or may
+become eligible for government benefits, including but not limited to the Nova Scotia Disability
+Support Program (DSP), I DIRECT that the share of my estate to which {{pronounOfBeneficiary}} would
+otherwise be entitled be held in a fully discretionary trust, to be known as the {{hensonBenificiary}} Henson
+Trust, on the following terms:
+
+1. Discretionary Authority:
+The trustee shall have absolute and unfettered discretion to pay or apply all or any
+portion of the income or capital of the trust for the care, maintenance, education,
+comfort, or general benefit of {{hensonBenificiary}} as the trustee sees fit.
+The beneficiary shall have no right to demand any payment, nor any enforceable claim to the
+trust property.
+
+2. Preservation of Benefits:
+It is my express intention that this trust be structured so as not to disqualify {{hensonBenificiary}} from
+receiving or continuing to receive benefits under any government program for persons
+with disabilities, including the Disability Support Program, and this trust shall be
+administered accordingly.
+
+3. No Vested Interest:
+{{hensonBenificiary}} shall not be considered to have a vested interest in the income or
+capital of the trust, and all decisions regarding distributions shall be made solely at the
+discretion of the trustee.
+
+4. Duration of Trust:
+This trust shall continue for the lifetime of {{hensonBenificiary}} or until such earlier time
+as the trustee, in their discretion, determines it is no longer necessary for the purpose for
+which it was created.
+
+5. Remainder on Death or Early Termination:
+Upon the death of {{hensonBenificiary}}, or upon the earlier termination of this trust as
+provided in paragraph 4, any property remaining in the trust shall be distributed as part
+of the rest and residue of my estate.
+
+6. Trustee Powers:
+The trustee shall have all powers necessary to administer this trust in accordance with
+its purpose, including the power to invest trust assets, engage agents or advisors, and
+make distributions in kind or in cash.
+
+7. Alternate Trustee:
+If the trustee appointed is unwilling or unable to act, I appoint {{altHensonTrustee}} of {{altHensonTrusteeCity}},
+{{altHensonTrusteeProvince}} to act as trustee of the Henson Trust in their place.
+{{/if}}
+
+7. POWER TO INVEST
+
+I authorize my executor or executors to make investments and otherwise deal with my estate
+(including property held for persons below a stipulated age or under any other legal disability)
+and to exercise any rights, powers, and privileges that may at any time exist with respect thereto
+to the same extent and as fully as I could if I were the living sole owner thereof as he, she, or
+they in his, her, or their absolute discretion consider to be in the best interests of my estate and
+the beneficiaries thereof.
+
+8. POWER OF SALE
+
+I authorize my executor or executors to use his, her, or their discretion in the realization of my
+estate with power to sell, call in, and convert into money any part of my estate not consisting of
+money at such time or times, in such manner and upon such terms and either for cash or credit
+or for part cash or part credit as he, she, or they may in his, her, or their uncontrolled discretion
+decide upon, or to postpone such conversion of my estate or any part or parts thereof for such
+length of time as he, she, or they may think best or to retain any portion of my estate in the form
+in which it may be at my death (notwithstanding that it may not be in the form of an investment
+in which executors are authorized to invest trust funds and whether or not there is a liability
+attached to any such portion of my estate) for such length of time as my executor or executors
+shall in his, her, or their complete discretion deem advisable, and my executor or executors shall
+not be held personally responsible for any loss that may occur to my estate by reason of his,
+her, or their so doing.
+
+9. DISCRETION TO PAY OR DIVIDE
+
+Except as herein expressly stated to the contrary, my executor or executors may make any
+division of my estate or set aside or pay any share or interest wholly or in part in the assets
+forming part of my estate at the time of my death or at the time of such division, setting aside, or
+payment, and I declare that where there may be some question of the value of any part of my
+estate my executor or executors may in his, her, or their absolute discretion fix the value of my
+estate or any part or parts thereof for the purpose of making any such division, setting aside, or
+payment, and his, her, or their decision shall be final and binding upon all persons concerned.
+
+10. AUTHORITY BINDING
+
+Any exercise by my executor or executors of the authority or discretion conferred on him, her, or
+them shall be binding on all beneficiaries of my estate whether or not such exercise would have
+the effect of conferring an advantage on any one or more of them at the expense of any other or
+could otherwise be considered but for the foregoing as not being an impartial exercise by my
+executor or executors of his, her, or their duties, powers, and discretions or as not maintaining
+an even hand among the beneficiaries.
+
+11. EXCLUSION OF BENEFITS FROM COMMUNITY OF PROPERTY
+
+All income from property given by me to any beneficiary who is, at my death, a spouse within
+the meaning of the relevant legislation shall be excluded from the net family property of such
+beneficiary.
+
+12. INDIVIDUALS OMITTED FROM BEQUESTS
+
+I declare that I have given full and careful consideration to the needs, circumstances, and
+relationships of each of my family members and any other individuals who may consider
+themselves to be my dependents. I have also considered any moral or legal obligations that
+may be said to exist under the Testators’ Family Maintenance Act or otherwise.
+
+If I have made no provision, or only limited provision, for any such person in this Will, it is not
+due to oversight, but is a deliberate decision made with full knowledge of the facts, and reflects
+my considered judgment, having regard to all relevant circumstances, including any support or
+gifts provided during my lifetime. It is my express intention that the dispositions made in this Will
+represent the full extent of my testamentary obligations, both legal and moral.
+
+{{#if independentSelfSufficient}}
+Independent and self-sufficient
+
+I have given careful consideration to the needs and circumstances of my child, {{omittedName}}, and
+have intentionally chosen not to make any provision for {{omittedNamePronoun}} in this Will. {{omittedName}} is an
+independent adult and is financially self-sufficient. I have no outstanding legal or moral
+obligations toward {{omittedName}} beyond those already fulfilled during my lifetime. This decision
+reflects my considered judgment and is not made out of forgetfulness or oversight, but rather as
+a deliberate exercise of my testamentary freedom.
+{{/if}}
+
+{{#if substantialLifetimeSupport}}
+Substantial lifetime support
+
+I have provided substantial financial support and/or gifts to {{omittedName}} during my lifetime,
+including {{supportDescription}}, and I have taken this into account in determining the provisions of this Will.
+It is my intention that such prior support be considered part of their full share of my estate for the purposes
+of determining whether I have discharged my moral and legal obligations.
+{{/if}}
+
+{{#if prolongedEstrangement}}
+Prolonged estrangement
+
+My relationship with {{omittedName}} has been distant and estranged for a significant period of
+time. Despite reasonable efforts on my part to maintain contact and a meaningful relationship,
+{{omittedNamePronoun}} has remained disengaged from me and the rest of the family. In light of this, and
+after careful consideration, I have decided not to include {{omittedName}} as a beneficiary of my estate.
+This decision is intentional and reflects the reality of our long-standing estrangement.
+{{/if}}
+
+{{#if prioritizing}}
+Prioritizing those in need
+
+In distributing my estate, I have given priority to those whom I consider to have a greater need
+or whom I have supported more closely during my lifetime, including {{priorityNames}}. I believe this
+allocation best reflects my moral and practical obligations. My decisions are based on
+considerations of financial need, personal support, and the strength of my ongoing relationships.
+{{/if}}
+
+{{#if strongFinancialPosition}}
+Strong financial position
+
+{{omittedName}} is financially independent and in a secure financial position, with access to
+significant income and/or assets. I have taken this into account in determining the distribution of
+my estate. It is my belief that {{omittedName}} does not require any additional financial provision from me,
+and my decision is made with this understanding.
+{{/if}}
+
+13. INTENTION WITH RESPECT TO JOINTLY HELD PROPERTY
+
+It is now and always has been my intention that any and all property I hold in a joint tenancy
+with another individual shall become the sole property of the surviving co-tenant upon my death.
+I specifically intend for the survivorship rights associated with joint tenancy to apply to all such
+properties.
+
+14. LITIGIOUS BENEFICIARIES
+
+If any person who may be entitled to any benefit under my Will, or the spouse of that person,
+commences any litigation in connection with any of the provisions of my Will, other than for the
+necessary judicial interpretation thereof, or at the discretion of the Court in the course of the
+administration of my estate, all benefits to which that person would have been entitled shall
+cease and I revoke all such benefits. I direct that these benefits so revoked shall fall into and
+form part of the residue of my estate to be distributed as if the person had predeceased me and
+had left no issue surviving me.
+
+IN TESTIMONY WHEREOF I have to this my last will and testament written upon this and three
+preceding pages of paper hereunto subscribed my name this {{signingDay}} day of {{signingMonth}},
+{{signingYear}}.
+
+SIGNED, PUBLISHED AND DECLARED
+
+By {{testator}} as and for their last will
+and testament, in the presence of us,
+both present at the same time, who at
+their request, in their presence and in the
+presence of each other, have hereunto
+subscribed our names as witnesses:
+
+_______________________________
+{{witness1}}
+{{witness1Address}}
+
+_______________________________
+{{witness2}}
+{{witness2Address}}
+
+
+
+
+
+
+
+
+
+
+
+
+
+_____________________________________
+{{testator}}
+
+
+Exhibit "A" referred to in the affidavit of
+{{witness1}} affirmed before me on this
+{{signingDay}} day of {{signingMonth}},
+{{signingYear}} at {{signingCity}}, NS
+
+_________________________________
+HOWARD J. MACKINNON
+Notary Public in and for the
+PROVINCE OF NOVA SCOTIA
+My commission does not expire
+
+
+CANADA
+PROVINCE OF NOVA SCOTIA
+TO WIT:
+
+AFFIDAVIT OF EXECUTION OF WILL
+
+I, {{witness1}}, of {{witness1Address}},
+
+MAKE OATH / AFFIRM AND SAY THAT:
+
+1. On {{signingMonth}} {{signingDay}}, {{signingYear}}, I was present and saw the
+Will attached to this Affidavit and marked as Exhibit "A" executed by {{testator}}.
+
+2. {{testator}} executed the document in the presence of me and of {{witness2}} of
+{{witness2Address}}. We were both present at the same time, and signed the document in
+the presence of {{testator}}, as attesting witnesses.
+
+3. I believe the person named in the document, whose signature I witnessed,
+{{testator}}, was at least the age of majority at the time the document was signed.
+
+SWORN/AFFIRMED BEFORE ME at
+{{signingCity}}, Nova Scotia this {{signingDay}} day of {{signingMonth}}, {{signingYear}}.
+
+
+ __________________________
+{{witness1}}
+
+ _____________________________
+Howard MacKinnon, a Notary Public in and
+for the Province of Nova Scotia.
+My Commission is not limited as to time.
+</div>
+<script>
+// small helper for numbering inside Handlebars loops (register at runtime if needed)
+</script>
+</body>
+</html>

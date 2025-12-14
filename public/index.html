@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Will Intake</title>
+  <style>
+    :root {
+      color-scheme: light;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: "Segoe UI", sans-serif;
+      background: #f7f7f7;
+      color: #111;
+    }
+    main {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 24px;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: 22px;
+    }
+    .lead {
+      margin: 0 0 20px;
+      color: #444;
+    }
+    .status {
+      min-height: 20px;
+      margin-bottom: 10px;
+      color: #111;
+    }
+    .status[data-type="error"] {
+      color: #b00020;
+    }
+    .session-row {
+      margin-bottom: 16px;
+      font-size: 14px;
+      color: #333;
+    }
+    section {
+      margin-top: 10px;
+    }
+    button {
+      cursor: pointer;
+      border: 1px solid #222;
+      background: #fff;
+      color: #111;
+      padding: 10px 14px;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    button.secondary {
+      border-color: #ccc;
+      background: #f2f2f2;
+    }
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    input {
+      padding: 10px;
+      border: 1px solid #bbb;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    input:focus {
+      outline: 2px solid #4a90e2;
+      border-color: #4a90e2;
+    }
+    .inline {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-top: 6px;
+    }
+    .inline input {
+      flex: 1;
+    }
+    .question {
+      font-size: 18px;
+      margin-bottom: 12px;
+    }
+    .option-btn {
+      display: block;
+      width: 100%;
+      text-align: left;
+      margin: 8px 0;
+      padding: 10px 12px;
+      border: 1px solid #222;
+      background: #fff;
+      border-radius: 4px;
+    }
+    #textForm {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    #textInput {
+      flex: 1;
+    }
+    .actions {
+      margin-top: 16px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Will Intake</h1>
+    <p class="lead">Basic UI to step through questions from the backend and download the generated file.</p>
+    <div id="status" class="status"></div>
+    <div class="session-row">Current session: <span id="sessionLabel">none</span></div>
+
+    <section id="startPanel">
+      <button id="startButton">Start new intake</button>
+    </section>
+
+    <section id="questionPanel" hidden>
+      <div id="questionText" class="question"></div>
+      <div id="options"></div>
+      <form id="textForm">
+        <input id="textInput" placeholder="Type your answer" autocomplete="off">
+        <button type="submit">Submit</button>
+      </form>
+      <div class="actions">
+        <button id="downloadButton" class="secondary" hidden>Download generated file</button>
+        <button id="resetButton" class="secondary">Start over</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      // Set API_BASE to your backend origin if it differs from this page's origin.
+      const API_BASE = "http://localhost:3001/api";
+      let sessionId = localStorage.getItem("sessionId") || "";
+      let cachedQuestion = null;
+
+      const loadCachedQuestion = () => {
+        try {
+          const raw = localStorage.getItem("lastQuestion");
+          return raw ? JSON.parse(raw) : null;
+        } catch {
+          return null;
+        }
+      };
+
+      const cacheQuestion = (q) => {
+        cachedQuestion = q || null;
+        if (cachedQuestion) {
+          localStorage.setItem("lastQuestion", JSON.stringify(cachedQuestion));
+        } else {
+          localStorage.removeItem("lastQuestion");
+        }
+      };
+
+      const els = {
+        status: document.getElementById("status"),
+        sessionLabel: document.getElementById("sessionLabel"),
+        startPanel: document.getElementById("startPanel"),
+        questionPanel: document.getElementById("questionPanel"),
+        questionText: document.getElementById("questionText"),
+        options: document.getElementById("options"),
+        textForm: document.getElementById("textForm"),
+        textInput: document.getElementById("textInput"),
+        startButton: document.getElementById("startButton"),
+        downloadButton: document.getElementById("downloadButton"),
+        resetButton: document.getElementById("resetButton"),
+      };
+
+      const setSession = (id) => {
+        sessionId = id || "";
+        els.sessionLabel.textContent = sessionId || "none";
+        if (sessionId) {
+          localStorage.setItem("sessionId", sessionId);
+          cacheQuestion(cachedQuestion);
+        } else {
+          localStorage.removeItem("sessionId");
+          cacheQuestion(null);
+        }
+      };
+
+      const setStatus = (text, type = "") => {
+        els.status.textContent = text || "";
+        els.status.dataset.type = type;
+      };
+
+      const showStart = (message) => {
+        if (message) setStatus(message);
+        els.startPanel.hidden = false;
+        els.questionPanel.hidden = true;
+        els.textInput.value = "";
+        els.options.innerHTML = "";
+        els.downloadButton.hidden = true;
+      };
+
+      const showQuestionPanel = () => {
+        els.startPanel.hidden = true;
+        els.questionPanel.hidden = false;
+      };
+
+      const parseOptions = (opts) => {
+        if (!opts) return [];
+        if (Array.isArray(opts)) return opts;
+        try {
+          return JSON.parse(opts);
+        } catch {
+          return [];
+        }
+      };
+
+      const renderQuestion = (question) => {
+        cacheQuestion(question);
+        showQuestionPanel();
+        const done = question && (question.Done === true || question.Done === "true");
+
+        els.options.innerHTML = "";
+        els.textForm.hidden = false;
+        els.downloadButton.hidden = true;
+
+        if (!question) {
+          els.questionText.textContent = "Waiting for the next question...";
+          return;
+        }
+
+        if (done) {
+          els.questionText.textContent = "All questions are complete.";
+          els.textForm.hidden = true;
+          els.downloadButton.hidden = !sessionId;
+          return;
+        }
+
+        els.questionText.textContent = question.Question || "No question text provided.";
+        const optionList = parseOptions(question.Options);
+
+        if (question.DataType === "options" && optionList.length) {
+          els.textForm.hidden = true;
+          optionList.forEach((opt) => {
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = "option-btn";
+            btn.textContent = opt;
+            btn.onclick = () => submitAnswer(opt);
+            els.options.appendChild(btn);
+          });
+        } else {
+          els.textForm.hidden = false;
+          els.textInput.value = "";
+          els.textInput.focus();
+        }
+      };
+
+      const handleResponse = async (res) => {
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          throw new Error(err.error || "Request failed");
+        }
+        return res.json();
+      };
+
+      const startIntake = async () => {
+        setStatus("Starting new intake...");
+        try {
+          const res = await fetch(`${API_BASE}/intake/start`, { method: "POST" });
+          const data = await handleResponse(res);
+          setSession(data.sessionId);
+          renderQuestion(data.question);
+          setStatus("");
+        } catch (err) {
+          setStatus(err.message, "error");
+        }
+      };
+
+      const submitAnswer = async (text) => {
+        if (!sessionId) {
+          setStatus("Start an intake first.", "error");
+          return;
+        }
+        setStatus("Sending answer...");
+        try {
+          const res = await fetch(`${API_BASE}/intake/answer`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ sessionId, userText: text }),
+          });
+          const data = await handleResponse(res);
+          renderQuestion(data.question);
+          setStatus("");
+        } catch (err) {
+          setStatus(err.message, "error");
+        }
+      };
+
+      const reset = () => {
+        setSession("");
+        showStart("Start a new intake to begin.");
+      };
+
+      els.startButton.onclick = () => startIntake();
+      els.textForm.onsubmit = (event) => {
+        event.preventDefault();
+        submitAnswer(els.textInput.value.trim());
+      };
+      els.downloadButton.onclick = () => {
+        if (sessionId) {
+          window.open(`${API_BASE}/intake/retrieve/${sessionId}`, "_blank");
+        }
+      };
+      els.resetButton.onclick = reset;
+
+      cachedQuestion = loadCachedQuestion();
+      if (sessionId && cachedQuestion) {
+        renderQuestion(cachedQuestion);
+      } else {
+        showStart("Start a new intake to begin.");
+      }
+    })();
+  </script>
+</body>
+</html>
