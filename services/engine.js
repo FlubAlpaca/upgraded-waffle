@@ -68,7 +68,18 @@ async function getNextQuestion(id){
     {role: "user", content: `Template: ${JSON.stringify(TEMPLATE)} Variables: ${JSON.stringify(s.variables, null, 2)} Required Variables: ${JSON.stringify(s.requiredVariables, null, 2)} Flags: ${JSON.stringify(s.flags, null, 2)} Required Flags: ${JSON.stringify(s.requiredFlags, null, 2)} Message History ${JSON.stringify(s.messageHistory, null, 2)} Last Question: ${JSON.stringify(s.lastQuestion, null, 2)}`},
    ]
    const content = await callAi(messages);
-   let data = JSON.parse(content.text);
+if (!content || !content.text) {
+  throw new Error("AI returned no content in getNextQuestion");
+}
+
+let data;
+try {
+  data = JSON.parse(content.text);
+} catch (e) {
+  console.error("AI raw response:", content.text);
+  throw new Error("Invalid JSON from AI in getNextQuestion");
+}
+
    if (data.Done == "true"){
       await generateWill(s.id);
    }
