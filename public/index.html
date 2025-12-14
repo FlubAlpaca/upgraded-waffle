@@ -144,10 +144,11 @@
   <script>
     (() => {
       // Default to relative API path so it works with same-origin deployments; override by setting window.API_BASE.
-      const API_BASE = (
-        (typeof window !== "undefined" && window.API_BASE) ||
-        "/api"
-      ).replace(/\/$/, "");
+     const API_BASE = (
+  (typeof window !== "undefined" && window.API_BASE) ||
+  ""
+).replace(/\/$/, "");
+
       let sessionId = localStorage.getItem("sessionId") || "";
       let cachedQuestion = null;
 
