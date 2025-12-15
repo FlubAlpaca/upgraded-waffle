@@ -8,8 +8,7 @@ const REQUIRED_VARIABLES = [
   { field: "testatorProvince", description: "Province/state of the testator used in the opening clause. Always required.", value:null },
   { field: "executor", description: "Primary executor’s full legal name used in the appointment clause. Always required; the count of executors is controlled by executorOne/executorTwo/executorThree (exactly one must be chosen).", value:null },
   { field: "executorCity", description: "City/town for the primary executor (for identification). Always required.", value:null },
-  { field: "executorProvince", description: "Province/state for the primary executor (for identification). Always required.", value:null },
-  { field: "pronoun", description: "Pronoun for the testator (e.g., he/she/they) used throughout for gendered references. Always required if the template renders pronouns explicitly.", value:null }
+  { field: "executorProvince", description: "Province/state for the primary executor (for identification). Always required.", value:null }
 ];
 
 const VARIABLES = [

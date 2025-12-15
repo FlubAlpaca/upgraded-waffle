@@ -1,5 +1,5 @@
 const { create, get, set } = require("./sessionStore");
-const { callAi } = require("./llm");
+const { aiParse, aiQuestion } = require("./llm");
 const { collateForHandlebars, renderTemplate, convertHtmlToDoc } = require("./generation");
 const { PROMPTS } = require("./prompts");
 const { TEMPLATE } = require("./template");
@@ -23,12 +23,10 @@ async function submitAnswer(sessionId, userText) {
    await set(s.id, {messageHistory: [...s.messageHistory]});
    const messages = [
     {role: "system", content: PROMPTS[0]}, //Response Parse System Prompt
-    {role: "user", content: `Template: ${JSON.stringify(TEMPLATE)} Variables: ${JSON.stringify(s.variables, null, 2)} Required Variables: ${JSON.stringify(s.requiredVariables, null, 2)} Flags: ${JSON.stringify(s.flags, null, 2)} Required Flags: ${JSON.stringify(s.requiredFlags, null, 2)} Message History ${JSON.stringify(s.messageHistory, null, 2)} Current Question: ${JSON.stringify(s.lastQuestion, null, 2)}, User input: ${JSON.stringify(userText, null, 2)}`}    
+    {role: "user", content: `Variables: ${JSON.stringify(s.variables, null, 2)} Required Variables: ${JSON.stringify(s.requiredVariables, null, 2)} Flags: ${JSON.stringify(s.flags, null, 2)} Required Flags: ${JSON.stringify(s.requiredFlags, null, 2)} Message History ${JSON.stringify(s.messageHistory, null, 2)} Current Question: ${JSON.stringify(s.lastQuestion, null, 2)}, User input: ${JSON.stringify(userText, null, 2)}`}    
    ]
-   const content = await callAi(messages);
-   const ai = JSON.parse(content.text);
-   console.log("Diag line 39 parse error");
-   console.log(ai);
+   const ai = await aiParse(messages);
+
    let item;
    for (const [field,value] of Object.entries(ai.updates.variables)){
      item = s.requiredVariables.find(v => v.field === field);
@@ -65,20 +63,9 @@ async function getNextQuestion(id){
    }
    const messages = [
     {role: "system", content: PROMPTS[1]},
-    {role: "user", content: `Template: ${JSON.stringify(TEMPLATE)} Variables: ${JSON.stringify(s.variables, null, 2)} Required Variables: ${JSON.stringify(s.requiredVariables, null, 2)} Flags: ${JSON.stringify(s.flags, null, 2)} Required Flags: ${JSON.stringify(s.requiredFlags, null, 2)} Message History ${JSON.stringify(s.messageHistory, null, 2)} Last Question: ${JSON.stringify(s.lastQuestion, null, 2)}`},
+    {role: "user", content: `Variables: ${JSON.stringify(s.variables, null, 2)} Required Variables: ${JSON.stringify(s.requiredVariables, null, 2)} Flags: ${JSON.stringify(s.flags, null, 2)} Required Flags: ${JSON.stringify(s.requiredFlags, null, 2)} Message History ${JSON.stringify(s.messageHistory, null, 2)} Last Question: ${JSON.stringify(s.lastQuestion, null, 2)}`},
    ]
-   const content = await callAi(messages);
-if (!content || !content.text) {
-  throw new Error("AI returned no content in getNextQuestion");
-}
-
-let data;
-try {
-  data = JSON.parse(content.text);
-} catch (e) {
-  console.error("AI raw response:", content.text);
-  throw new Error("Invalid JSON from AI in getNextQuestion");
-}
+   const data = await aiQuestion(messages);
 
    if (data.Done == "true"){
       await generateWill(s.id);
