@@ -3,146 +3,458 @@
 // Each item has: { field: "<name>", description: "<what it means, any mutual exclusivity, and when it's required>" }
 
 const REQUIRED_VARIABLES = [
-  { field: "testator", description: "Full legal name of the will-maker (testator). Always required to populate the opening identification and execution clauses.", value:null },
-  { field: "testatorCity", description: "City/town of the testator used in the opening clause. Always required.", value:null },
-  { field: "testatorProvince", description: "Province/state of the testator used in the opening clause. Always required.", value:null },
-  { field: "executor", description: "Primary executor’s full legal name used in the appointment clause. Always required; the count of executors is controlled by executorOne/executorTwo/executorThree (exactly one must be chosen).", value:null },
-  { field: "executorCity", description: "City/town for the primary executor (for identification). Always required.", value:null },
-  { field: "executorProvince", description: "Province/state for the primary executor (for identification). Always required.", value:null }
+  {
+    field: "testator",
+    description: "The full legal name of the testator. Always required. Used in the opening identification clause, execution clause, signature blocks, and affidavit of execution.",
+    value: null
+  },
+  {
+    field: "testatorCity",
+    description: "The city or town where the testator resides. Always required. Used in the opening identification clause and affidavit.",
+    value: null
+  },
+  {
+    field: "testatorProvince",
+    description: "The province or state of the testator’s residence. Always required. Used in the opening identification clause.",
+    value: null
+  },
+  {
+    field: "executor",
+    description: "Full legal name of the primary executor. Always required. Used in executor appointment clauses and survivorship provisions. The number and role of executors is controlled by executorOne/executorTwo/executorThree (exactly one must be true).",
+    value: null
+  },
+  {
+    field: "executorCity",
+    description: "City or town of residence of the primary executor. Always required. Used for executor identification in appointment clauses.",
+    value: null
+  },
+  {
+    field: "executorProvince",
+    description: "Province or state of residence of the primary executor. Always required. Used for executor identification in appointment clauses.",
+    value: null
+  }
 ];
+
 
 const VARIABLES = [
-  { field: "spouseName", description: "Current spouse’s full legal name for divorce clause. Required if divorce=true.", value: null },
-  { field: "intendedSpouse", description: "Fiancé(e) named for a ‘made in contemplation of marriage’ clause. Required if marriage=true.", value: null },
+  {
+    field: "spouseName",
+    description: "Full legal name of the testator’s spouse. Required only if divorce=true, as it is referenced in the divorce preservation clause.",
+    value: null
+  },
+  {
+    field: "intendedSpouse",
+    description: "Full legal name of the intended spouse. Required only if marriage=true, for the ‘made in contemplation of marriage’ clause.",
+    value: null
+  },
 
-  { field: "altExecutor", description: "First alternate executor’s full legal name. Required if any of altExecutorOne/altExecutorTwo/altExecutorThree is true.", value: null },
-  { field: "altExecutorCity", description: "City/town of first alternate executor. Required if altExecutor* is required.", value: null },
-  { field: "altExecutorProvince", description: "Province/state of first alternate executor. Required if altExecutor* is required.", value: null },
+  {
+    field: "altExecutor",
+    description: "Full legal name of the first alternate executor. Required if any of altExecutorOne, altExecutorTwo, or altExecutorThree is true.",
+    value: null
+  },
+  {
+    field: "altExecutorCity",
+    description: "City or town of residence of the first alternate executor. Required whenever altExecutor is required.",
+    value: null
+  },
+  {
+    field: "altExecutorProvince",
+    description: "Province or state of residence of the first alternate executor. Required whenever altExecutor is required.",
+    value: null
+  },
 
-  { field: "alt2Executor", description: "Second alternate executor’s full legal name. Required if altExecutorTwo=true or altExecutorThree=true (or if altAltExecutor=true).", value: null },
-  { field: "alt2ExecutorCity", description: "City/town of second alternate executor. Required with alt2Executor.", value: null },
-  { field: "alt2ExecutorProvince", description: "Province/state of second alternate executor. Required with alt2Executor.", value: null },
+  {
+    field: "alt2Executor",
+    description: "Full legal name of the second alternate executor. Required if altExecutorTwo, altExecutorThree, or altAltExecutor is true.",
+    value: null
+  },
+  {
+    field: "alt2ExecutorCity",
+    description: "City or town of residence of the second alternate executor. Required whenever alt2Executor is required.",
+    value: null
+  },
+  {
+    field: "alt2ExecutorProvince",
+    description: "Province or state of residence of the second alternate executor. Required whenever alt2Executor is required.",
+    value: null
+  },
 
-  { field: "hensonBenificiary", description: "Name of the beneficiary for the Henson (fully discretionary) trust. Required if hensonTrust=true. (Spelling kept to match template variable.)", value: null },
-  { field: "hensonAmount", description: "Amount or formula to fund the Henson trust. Required if hensonTrust=true.", value: null },
-  { field: "altHensonTrustee", description: "Alternate trustee for the Henson trust. Required if hensonTrust=true.", value: null },
-  { field: "altHensonTrusteeCity", description: "City/town of the alternate Henson trustee. Required with altHensonTrustee.", value: null },
-  { field: "altHensonTrusteeProvince", description: "Province/state of the alternate Henson trustee. Required with altHensonTrustee.", value: null },
+  {
+    field: "hensonBenificiary",
+    description: "Full legal name of the beneficiary of the Henson trust. Required if hensonTrust=true. Spelling intentionally matches template variable.",
+    value: null
+  },
+  {
+    field: "hensonAmount",
+    description: "Amount or description of the share of the estate to be allocated to the Henson trust. Required if hensonTrust=true.",
+    value: null
+  },
+  {
+    field: "altHensonTrustee",
+    description: "Full legal name of the alternate trustee for the Henson trust. Required if hensonTrust=true.",
+    value: null
+  },
+  {
+    field: "altHensonTrusteeCity",
+    description: "City or town of residence of the alternate Henson trustee. Required whenever altHensonTrustee is required.",
+    value: null
+  },
+  {
+    field: "altHensonTrusteeProvince",
+    description: "Province or state of residence of the alternate Henson trustee. Required whenever altHensonTrustee is required.",
+    value: null
+  },
 
-  { field: "lifeTenant", description: "Person granted a life interest (e.g., to reside in a home or receive income for life). Required if any of lifeTenantFlag is true.", value: null },
-  { field: "lifeTenantTransferRecipiant", description: "Person who receives the property after the life estate ends when using a transfer remainder. Required if lifeTenantTransfer=true. (Spelling kept to match template variable.)", value: null },
+  {
+    field: "lifeTenant",
+    description: "Full legal name of the person granted a life interest in the residential property. Required if lifeTenantFlag=true.",
+    value: null
+  },
+  {
+    field: "lifeTenantTransferRecipiant",
+    description: "Full legal name of the person who receives the residential property after the life estate ends. Required if lifeTenantTransfer=true. Spelling intentionally matches template variable.",
+    value: null
+  },
 
-  { field: "nameOfBeneficiary", description: "Named recipient for a discretionary trust. Required if discretionaryTrust is true.", value: null },
-  { field: "pronounOfBeneficiary", description: "Pronoun for hensonBenificiary (he/she/they). Required when hensonTrust is true.", value: null },
+  {
+    field: "nameOfBeneficiary",
+    description: "Full legal name of the beneficiary of a discretionary (non-Henson) trust. Required if discretionaryTrust=true.",
+    value: null
+  },
+  {
+    field: "pronounOfBeneficiary",
+    description: "Pronoun (he/she/they) for the Henson trust beneficiary. Required if hensonTrust=true, as it is used throughout the trust provisions.",
+    value: null
+  },
 
-  { field: "fallbackPerson", description: "Named fallback recipient for the residue if the primary residuary gift fails. Required if fallbackToNamedPerson=true.", value: null },
-  { field: "catastrophePerson", description: "Named recipient if a catastrophe clause applies (e.g., all primary beneficiaries predecease). Required if catastropheToNamedPerson=true.", value: null },
+  {
+    field: "fallbackPerson",
+    description: "Full legal name of the person who receives the residue if the primary residuary beneficiary fails. Required if fallbackToNamedPerson=true.",
+    value: null
+  },
+  {
+    field: "catastrophePerson",
+    description: "Full legal name of the person who receives the estate under the catastrophe clause. Required if catastropheToNamedPerson=true.",
+    value: null
+  },
 
-  { field: "petCareAmount", description: "Amount to be set aside for pet care. Required if petCare=true.", value: null },
+  {
+    field: "petCareAmount",
+    description: "Monetary amount to be set aside for pet care. Required if petCare=true.",
+    value: null
+  },
 
-  { field: "priorityNames", description: "List of names used to prioritize beneficiaries for distributions. Required if prioritizing=true.", value: null },
+  {
+    field: "priorityNames",
+    description: "Comma-separated or formatted list of names given priority in discretionary or list-based distributions. Required if prioritizing=true.",
+    value: null
+  },
 
-  { field: "omittedName", description: "Name of a person intentionally omitted from gifts. Required if any of prolongedEstrangement/independentSelfSufficient/strongFinancialPosition/substantialLifetimeSupport is true.", value: null },
-  { field: "omittedNamePronoun", description: "Pronoun for omittedName. Required when omittedName is set.", value: null },
-  { field: "supportDescription", description: "Short description of significant lifetime support previously given to an omitted person. Required if substantialLifetimeSupport=true.", value: null },
+  {
+    field: "omittedName",
+    description: "Full legal name of a person intentionally omitted from the will. Required if any omission rationale flag is true.",
+    value: null
+  },
+  {
+    field: "omittedNamePronoun",
+    description: "Pronoun (he/she/they) for the omitted person. Required whenever omittedName is set.",
+    value: null
+  },
+  {
+    field: "supportDescription",
+    description: "Short description of substantial lifetime financial support or gifts previously provided to the omitted person. Required if substantialLifetimeSupport=true.",
+    value: null
+  },
 
-  // ADDED:
-  { field: "residentialAddress", description: "Street address (and city/province if desired) of the Residential Property for the life interest clause. Required if lifeTenantFlag is true.", value: null },
-  // ADDED:
-  { field: "lifeTenantPronoun", description: "Pronoun for lifeTenant (he/she/they). Required if lifeTenantFlag is true.", value: null },
-  // ADDED: formatted list like “(i) A\n(ii) B” for distribute-on-termination path
-  { field: "lifeTenantDistributeList", description: "Preformatted drop-in list of recipients for sale proceeds when life tenancy ends (use “(i) …\\n(ii) …”). Required if lifeTenantDistribute=true.", value: null },
+  {
+    field: "residentialAddress",
+    description: "Street address of the residential property subject to the life interest. Required if lifeTenantFlag=true.",
+    value: null
+  },
+  {
+    field: "lifeTenantPronoun",
+    description: "Pronoun (he/she/they) for the life tenant. Required if lifeTenantFlag=true.",
+    value: null
+  },
+  {
+    field: "lifeTenantDistributeList",
+    description: "Preformatted list of recipients for sale proceeds after the life tenancy ends. Required if lifeTenantDistribute=true.",
+    value: null
+  },
 
-  // ADDED: specific gifts list block
-  { field: "aiGenList", description: "Preformatted multi-line specific gifts list injected under “giftList” (e.g., “(i) Item to X\\n(ii) Item to Y”). Required if giftList=true.", value: null },
+  {
+    field: "aiGenList",
+    description: "Preformatted multi-line list of specific gifts and recipients. Required if giftList=true.",
+    value: null
+  },
 
-  // ADDED: residuary list & shares
-  { field: "residueList", description: "Preformatted drop-in list of residuary recipients if residueToList=true (e.g., “(i) Luke Hodder\\n(ii) Rebecca Hodder”).", value: null },
-  // ADDED: array for residueShares variant
-  { field: "residueSharesList", description: "Array of objects for residueShares (e.g., “(i) Luke Hodder 90 shares\\n(ii) Rebecca Hodder 10 shares”) Used when residueShares=true.", value: null },
+  {
+    field: "residueList",
+    description: "Preformatted list of residuary beneficiaries. Required if residueToList=true and residueShares=false.",
+    value: null
+  },
+  {
+    field: "residueSharesList",
+    description: "Preformatted list specifying residuary share allocations. Required if residueShares=true.",
+    value: null
+  },
 
-  // ADDED: gift-over (fallback) list & shares text blocks
-  { field: "fallbackList", description: "Preformatted drop-in list for fallback distribution (e.g., “(i) A\\n(ii) B”). Required if fallbackToList=true.", value: null },
-  // ADDED: text blob directly rendered by template (matches template placement)
-  { field: "fallbackSharesList", description: "Preformatted lines specifying fallback share splits, rendered verbatim by the template. Required if fallbackShares flag is true.", value: null },
+  {
+    field: "fallbackList",
+    description: "Preformatted list of fallback beneficiaries. Required if fallbackToList=true and fallbackShares=false.",
+    value: null
+  },
+  {
+    field: "fallbackSharesList",
+    description: "Preformatted list specifying fallback share allocations. Required if fallbackShares=true.",
+    value: null
+  },
 
-  // ADDED: catastrophe list & shares text blocks (note exact spelling in template for shares key)
-  { field: "catastropheList", description: "Preformatted drop-in list for catastrophe distribution (e.g., “(i) A\\n(ii) B”). Required if catastropheToList=true.", value: null },
-  // ADDED: template uses a typo ‘catastropeShares’; we mirror it for compatibility.
-  { field: "catastropeSharesList", description: "Preformatted lines specifying catastrophe share splits; variable name intentionally matches template typo. Required if catastropheShares flag is true.", value: null },
+  {
+    field: "catastropheList",
+    description: "Preformatted list of catastrophe beneficiaries. Required if catastropheToList=true and catastropheShares=false.",
+    value: null
+  },
+  {
+    field: "catastropeSharesList",
+    description: "Preformatted list specifying catastrophe share allocations. Required if catastropheShares=true. Name intentionally matches template typo.",
+    value: null
+  },
 
-  // ADDED: used in the gift-over clause text (the subject whose survival is checked)
-  { field: "restPerson", description: "Label used in giftover section of the will. Should refrence person or party named in the rest and residue section.", value: null }
+  {
+    field: "restPerson",
+    description: "Label referring to the primary residuary beneficiary whose survival is tested in gift-over clauses. Required whenever any fallback clause is used.",
+    value: null
+  }
 ];
+
 
 const REQUIRED_FLAGS = [
   // --- Executor count: choose exactly ONE ---
-  { field: "executorOne", description: "Exactly one primary executor is appointed. Mutually exclusive with executorTwo and executorThree. One of executorOne|executorTwo|executorThree is required.", value: null },
-  { field: "executorTwo", description: "Two co-executors are appointed working together. Mutually exclusive with executorOne and executorThree. One of executorOne|executorTwo|executorThree is required.", value: null },
-  { field: "executorThree", description: "Two co-executors are appointed working indepentatly. Mutually exclusive with executorOne and executorTwo. One of executorOne|executorTwo|executorThree is required.", value: null },
+  {
+    field: "executorOne",
+    description: "Indicates that exactly one executor is appointed. Mutually exclusive with executorTwo and executorThree. Exactly one of executorOne, executorTwo, or executorThree MUST be true.",
+    value: null
+  },
+  {
+    field: "executorTwo",
+    description: "Indicates that two co-executors are appointed and must act jointly in all estate matters. Mutually exclusive with executorOne and executorThree. Exactly one of executorOne, executorTwo, or executorThree MUST be true.",
+    value: null
+  },
+  {
+    field: "executorThree",
+    description: "Indicates that two co-executors are appointed and may act independently of each other. Mutually exclusive with executorOne and executorTwo. Exactly one of executorOne, executorTwo, or executorThree MUST be true.",
+    value: null
+  },
 
   // --- Primary residuary destination: choose exactly ONE ---
-  { field: "residueToChildren", description: "Residuary estate to the testator’s children (per stirpes/by default equal). Mutually exclusive with residueToList, residueToExecutor, residueToSiblings. Exactly one of the residue* options is required.", value: null },
-  { field: "residueToList", description: "Residuary estate to a named list of people/entities. Mutually exclusive with residueToChildren, residueToExecutor, residueToSiblings. Exactly one of the residue* options is required. If residueShares=true, a share map/list is also expected.", value: null },
-  { field: "residueToExecutor", description: "Residuary estate to the executor (uncommon but supported). Mutually exclusive with residueToChildren, residueToList, residueToSiblings. Exactly one of the residue* options is required.", value: null },
-  { field: "residueToSiblings", description: "Residuary estate to siblings (typically equally or per stirpes). Mutually exclusive with residueToChildren, residueToList, residueToExecutor. Exactly one of the residue* options is required.", value: null },
+  {
+    field: "residueToChildren",
+    description: "Directs the residuary estate to the testator’s surviving children, share and share alike. Mutually exclusive with residueToList, residueToExecutor, and residueToSiblings. Exactly one residue* flag MUST be true.",
+    value: null
+  },
+  {
+    field: "residueToList",
+    description: "Directs the residuary estate to a named list of beneficiaries. Mutually exclusive with residueToChildren, residueToExecutor, and residueToSiblings. Exactly one residue* flag MUST be true. Requires residueList unless residueShares=true.",
+    value: null
+  },
+  {
+    field: "residueToExecutor",
+    description: "Directs the residuary estate to the executor personally. Mutually exclusive with residueToChildren, residueToList, and residueToSiblings. Exactly one residue* flag MUST be true.",
+    value: null
+  },
+  {
+    field: "residueToSiblings",
+    description: "Directs the residuary estate to the testator’s surviving siblings, share and share alike. Mutually exclusive with residueToChildren, residueToList, and residueToExecutor. Exactly one residue* flag MUST be true.",
+    value: null
+  },
 
   // --- Fallback destination (if the primary residuary fails): choose exactly ONE ---
-  { field: "fallbackToChildren", description: "Fallback residue to children. Mutually exclusive with fallbackToList, fallbackToNamedPerson, fallbackToSiblings. Exactly one fallback* is required.", value: null },
-  { field: "fallbackToList", description: "Fallback residue to a named list. Mutually exclusive with fallbackToChildren, fallbackToNamedPerson, fallbackToSiblings. Exactly one fallback* is required. If fallbackShares=true, a share map/list is also expected.", value: null },
-  { field: "fallbackToNamedPerson", description: "Fallback residue to a single named person. Mutually exclusive with fallbackToChildren, fallbackToList, fallbackToSiblings. Exactly one fallback* is required; requires fallbackPerson.", value: null },
-  { field: "fallbackToSiblings", description: "Fallback residue to siblings. Mutually exclusive with fallbackToChildren, fallbackToList, fallbackToNamedPerson. Exactly one fallback* is required.", value: null },
+  {
+    field: "fallbackToChildren",
+    description: "Directs the residue to the testator’s children if the primary residuary beneficiary fails to survive. Mutually exclusive with fallbackToList, fallbackToNamedPerson, and fallbackToSiblings. Exactly one fallback* flag MUST be true.",
+    value: null
+  },
+  {
+    field: "fallbackToList",
+    description: "Directs the residue to a named list of fallback beneficiaries if the primary residuary beneficiary fails. Mutually exclusive with fallbackToChildren, fallbackToNamedPerson, and fallbackToSiblings. Exactly one fallback* flag MUST be true. Requires fallbackList unless fallbackShares=true.",
+    value: null
+  },
+  {
+    field: "fallbackToNamedPerson",
+    description: "Directs the residue to a single named fallback beneficiary if the primary residuary beneficiary fails. Mutually exclusive with fallbackToChildren, fallbackToList, and fallbackToSiblings. Exactly one fallback* flag MUST be true. Requires fallbackPerson.",
+    value: null
+  },
+  {
+    field: "fallbackToSiblings",
+    description: "Directs the residue to the testator’s siblings if the primary residuary beneficiary fails. Mutually exclusive with fallbackToChildren, fallbackToList, and fallbackToNamedPerson. Exactly one fallback* flag MUST be true.",
+    value: null
+  },
 
-  // --- Catastrophe destination (if no named beneficiaries survive): choose exactly ONE ---
-  { field: "catastropheToChildren", description: "Catastrophe residue to children. Mutually exclusive with catastropheToList, catastropheToNamedPerson, catastropheToSiblings. Exactly one catastrophe* is required.", value: null },
-  { field: "catastropheToList", description: "Catastrophe residue to a named list. Mutually exclusive with catastropheToChildren, catastropheToNamedPerson, catastropheToSiblings. Exactly one catastrophe* is required. If catastropheShares=true, a share map/list is also expected.", value: null },
-  { field: "catastropheToNamedPerson", description: "Catastrophe residue to one named person. Mutually exclusive with catastropheToChildren, catastropheToList, catastropheToSiblings. Exactly one catastrophe* is required; requires catastrophePerson.", value: null },
-  { field: "catastropheToSiblings", description: "Catastrophe residue to siblings. Mutually exclusive with catastropheToChildren, catastropheToList, catastropheToNamedPerson. Exactly one catastrophe* is required.", value: null }
+  // --- Catastrophe destination (if no disposition otherwise applies): choose exactly ONE ---
+  {
+    field: "catastropheToChildren",
+    description: "Directs any undisposed portion of the estate to the testator’s children. Mutually exclusive with catastropheToList, catastropheToNamedPerson, and catastropheToSiblings. Exactly one catastrophe* flag MUST be true.",
+    value: null
+  },
+  {
+    field: "catastropheToList",
+    description: "Directs any undisposed portion of the estate to a named list of beneficiaries. Mutually exclusive with catastropheToChildren, catastropheToNamedPerson, and catastropheToSiblings. Exactly one catastrophe* flag MUST be true. Requires catastropheList unless catastropheShares=true.",
+    value: null
+  },
+  {
+    field: "catastropheToNamedPerson",
+    description: "Directs any undisposed portion of the estate to a single named beneficiary. Mutually exclusive with catastropheToChildren, catastropheToList, and catastropheToSiblings. Exactly one catastrophe* flag MUST be true. Requires catastrophePerson.",
+    value: null
+  },
+  {
+    field: "catastropheToSiblings",
+    description: "Directs any undisposed portion of the estate to the testator’s siblings. Mutually exclusive with catastropheToChildren, catastropheToList, and catastropheToNamedPerson. Exactly one catastrophe* flag MUST be true.",
+    value: null
+  }
 ];
+
 
 const FLAGS = [
-  // Alternates for executor (optional group)
-  { field: "altExecutorOne", description: "One alternate executor is named (uses altExecutor* variables). Mutually exclusive with altExecutorTwo and altExecutorThree. Optional.", value: null },
-  { field: "altExecutorTwo", description: "Two alternates are named to work together (uses altExecutor* and alt2Executor*). Mutually exclusive with altExecutorOne and altExecutorThree. Optional.", value: null },
-  { field: "altExecutorThree", description: "Two alternates are named to work independently (first two captured by altExecutor*/alt2Executor*; template may repeat pattern for a third). Mutually exclusive with altExecutorOne and altExecutorTwo. Optional.", value: null },
-  { field: "altAltExecutor", description: "There is a second-level backup to the first alternate; requires alt2Executor* variables. Optional toggle depending on template structure.", value: null },
+  // --- Alternate executors (optional group) ---
+  {
+    field: "altExecutorOne",
+    description: "Indicates that one alternate executor is appointed if the primary executor(s) cannot act. Mutually exclusive with altExecutorTwo and altExecutorThree. Optional.",
+    value: null
+  },
+  {
+    field: "altExecutorTwo",
+    description: "Indicates that two alternate executors are appointed to act jointly if the primary executor(s) cannot act. Mutually exclusive with altExecutorOne and altExecutorThree. Optional.",
+    value: null
+  },
+  {
+    field: "altExecutorThree",
+    description: "Indicates that two alternate executors are appointed and may act independently if the primary executor(s) cannot act. Mutually exclusive with altExecutorOne and altExecutorTwo. Optional.",
+    value: null
+  },
+  {
+    field: "altAltExecutor",
+    description: "Indicates that a second-level alternate executor is appointed if both the primary and first alternate executors cannot act. Requires alt2Executor* variables. Optional.",
+    value: null
+  },
 
-  // Share toggles for list distributions
-  { field: "residueShares", description: "If true and residueToList=true, the template expects custom percentage/fractional shares for the residuary list (share map/list variable lives outside this manifest). Optional.", value: null },
-  { field: "fallbackShares", description: "If true and fallbackToList=true, expects custom shares for the fallback list. Optional.", value: null },
-  { field: "catastropheShares", description: "If true and catastropheToList=true, expects custom shares for the catastrophe list. Optional.", value: null },
+  // --- Share toggles for list-based distributions ---
+  {
+    field: "residueShares",
+    description: "When true and residueToList=true, indicates that the residuary estate is divided according to custom share allocations rather than equally. Requires residueSharesList. Optional.",
+    value: null
+  },
+  {
+    field: "fallbackShares",
+    description: "When true and fallbackToList=true, indicates that fallback beneficiaries receive custom share allocations rather than equal shares. Requires fallbackSharesList. Optional.",
+    value: null
+  },
+  {
+    field: "catastropheShares",
+    description: "When true and catastropheToList=true, indicates that catastrophe beneficiaries receive custom share allocations rather than equal shares. Requires catastropeSharesList. Optional.",
+    value: null
+  },
 
-  // Specific bequests
-  //{ field: "gift", description: "Enable a single specific gift to nameOfBeneficiary. Mutually exclusive with giftList. Requires nameOfBeneficiary (and pronounOfBeneficiary if pronouns are rendered). Optional.", value: null },
-  { field: "giftList", description: "Enable the specific gift section", value: null },
-  { field: "anyPerson", description: "Enable a clause that allows for the entilement of a person to go to their children if they predeceased the testator", value: null },
+  // --- Specific gifts ---
+  {
+    field: "giftList",
+    description: "Enables the specific gifts section of the will. When true, the template expects aiGenList to contain a preformatted list of specific gifts and recipients. Optional.",
+    value: null
+  },
+  {
+    field: "anyPerson",
+    description: "Enables a clause allowing a deceased non-child beneficiary’s share to pass to their lineal descendants by representation. Optional.",
+    value: null
+  },
 
-  // Trusts
-  { field: "hensonTrust", description: "Use a Henson (fully discretionary) trust structure for a beneficiary. Mutually exclusive with discretionaryTrust (choose one trust approach). Requires hensonBenificiary, hensonAmount, and altHensonTrustee. Optional.", value: null },
-  { field: "discretionaryTrust", description: "Use a standard discretionary trust (non-Henson) for a beneficiary. Mutually exclusive with hensonTrust. Optional.", value: null },
-  //CHECKED UP TO HERE
-  // Life-estate options (choose at most ONE if a life estate is used)
-  { field: "lifeTenantDistribute", description: "During the life tenancy, income/benefit is distributed to lifeTenant, then residue follows the normal scheme. Mutually exclusive with lifeTenantRest and lifeTenantTransfer. Requires lifeTenant. Optional.", value: null },
-  { field: "lifeTenantRest", description: "Life tenant enjoys use; on termination the property falls into the residuary (‘rest’) clause. Mutually exclusive with lifeTenantDistribute and lifeTenantTransfer. Requires lifeTenant. Optional.", value: null },
-  { field: "lifeTenantTransfer", description: "On termination of the life estate, a specific person receives the property. Mutually exclusive with lifeTenantDistribute and lifeTenantRest. Requires lifeTenant and lifeTenantTransferRecipiant. Optional.", value: null },
+  // --- Trusts ---
+  {
+    field: "hensonTrust",
+    description: "Enables a Henson (fully discretionary) trust for a beneficiary with a disability. Mutually exclusive with discretionaryTrust. Requires hensonBenificiary, hensonAmount, pronounOfBeneficiary, and altHensonTrustee*. Optional.",
+    value: null
+  },
+  {
+    field: "discretionaryTrust",
+    description: "Enables a standard discretionary trust (non-Henson). Mutually exclusive with hensonTrust. Requires nameOfBeneficiary. Optional.",
+    value: null
+  },
 
-  // Family status & cross-border clauses
-  { field: "marriage", description: "Include a clause that the will is made in contemplation of marriage. Typically requires spouseName or intendedSpouse. Optional.", value: null },
-  { field: "divorce", description: "Include a clause addressing the effect of divorce/separation on the will. May reference spouseName; logic depends on template. Optional.", value: null },
-  { field: "foreignWills", description: "Include a clause acknowledging foreign/previous wills and limiting revocation scope. Optional.", value: null },
-  { field: "myChild", description: "Toggle kinship-specific phrasing when a beneficiary is the testator’s child. Often used with residueToChildren or specific gifts. Optional.", value: null },
+  // --- Life estate options (choose at most ONE if used) ---
+  {
+    field: "lifeTenantDistribute",
+    description: "Creates a life estate where the life tenant enjoys the property, and upon termination the property is sold and proceeds distributed to a specified list. Mutually exclusive with lifeTenantRest and lifeTenantTransfer. Requires lifeTenant, residentialAddress, lifeTenantPronoun, and lifeTenantDistributeList. Optional.",
+    value: null
+  },
+  {
+    field: "lifeTenantRest",
+    description: "Creates a life estate where the life tenant enjoys the property, and upon termination the property or sale proceeds fall into the residuary estate. Mutually exclusive with lifeTenantDistribute and lifeTenantTransfer. Requires lifeTenant, residentialAddress, and lifeTenantPronoun. Optional.",
+    value: null
+  },
+  {
+    field: "lifeTenantTransfer",
+    description: "Creates a life estate where, upon termination, the property is transferred outright to a named person. Mutually exclusive with lifeTenantDistribute and lifeTenantRest. Requires lifeTenant, residentialAddress, lifeTenantPronoun, and lifeTenantTransferRecipiant. Optional.",
+    value: null
+  },
 
-  // Pet care
-  { field: "petCare", description: "Create a pet-care fund or instruction. Requires petCareAmount. Optional.", value: null },
+  // --- Family status & cross-border clauses ---
+  {
+    field: "marriage",
+    description: "Includes a clause stating the will is made in contemplation of marriage. Requires intendedSpouse. Optional.",
+    value: null
+  },
+  {
+    field: "divorce",
+    description: "Includes a clause preserving gifts and appointments to a spouse despite divorce. Requires spouseName. Optional.",
+    value: null
+  },
+  {
+    field: "foreignWills",
+    description: "Includes a clause limiting revocation of foreign or non–Nova Scotia wills. Optional.",
+    value: null
+  },
+  {
+    field: "myChild",
+    description: "Enables a clause allowing a deceased child’s share to pass to their lineal descendants by representation. Optional.",
+    value: null
+  },
 
-  // Omission rationale flags (used with omittedName)
-  { field: "independentSelfSufficient", description: "States the omitted person is independent/self-sufficient. Can be combined with other omission reasons. Requires omittedName. Optional.", value: null },
-  { field: "strongFinancialPosition", description: "States the omitted person has a strong financial position. Can be combined with other omission reasons. Requires omittedName. Optional.", value: null },
-  { field: "substantialLifetimeSupport", description: "States the omitted person already received substantial lifetime support. Can be combined with other omission reasons. Requires omittedName and supportDescription. Optional.", value: null },
-  { field: "prolongedEstrangement", description: "States there has been a prolonged estrangement with the omitted person. Can be combined with other omission reasons. Requires omittedName. Optional.", value: null },
+  // --- Pet care ---
+  {
+    field: "petCare",
+    description: "Enables a pet-care provision directing funds to care for pets owned at death. Requires petCareAmount. Optional.",
+    value: null
+  },
 
-  // Prioritization helper
-  { field: "prioritizing", description: "When distributing to a list, use priorityNames to set order/priority. Requires priorityNames. Optional.", value: null }
+  // --- Omission rationale flags ---
+  {
+    field: "independentSelfSufficient",
+    description: "States that an omitted person is financially independent and self-sufficient. Requires omittedName and omittedNamePronoun. Optional.",
+    value: null
+  },
+  {
+    field: "strongFinancialPosition",
+    description: "States that an omitted person is in a strong financial position and does not require provision. Requires omittedName and omittedNamePronoun. Optional.",
+    value: null
+  },
+  {
+    field: "substantialLifetimeSupport",
+    description: "States that an omitted person has already received substantial lifetime support. Requires omittedName, omittedNamePronoun, and supportDescription. Optional.",
+    value: null
+  },
+  {
+    field: "prolongedEstrangement",
+    description: "States that the testator has been estranged from an omitted person for a prolonged period. Requires omittedName and omittedNamePronoun. Optional.",
+    value: null
+  },
+
+  // --- Prioritization helper ---
+  {
+    field: "prioritizing",
+    description: "Includes language explaining that certain beneficiaries were prioritized due to need or relationship. Requires priorityNames. Optional.",
+    value: null
+  }
 ];
+
 
 module.exports = { REQUIRED_VARIABLES, VARIABLES, REQUIRED_FLAGS, FLAGS };
