@@ -319,7 +319,7 @@
       };
       els.downloadButton.onclick = () => {
         if (sessionId) {
-          window.open(`${API_BASE}/intake/retrieve/${sessionId}`, "_blank");
+          window.open(`${API_BASE}/api/intake/retrieve/${sessionId}`, "_blank");
         }
       };
       els.resetButton.onclick = reset;
